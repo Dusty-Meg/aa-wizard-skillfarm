@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "allianceauth.groupmanagement",
     "allianceauth.notifications",
     "allianceauth.thirdparty.navhelper",
+    "corptools"
 ]
 
 PACKAGE = "wizardskillfarm"
