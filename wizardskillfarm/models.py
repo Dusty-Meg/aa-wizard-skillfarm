@@ -3,12 +3,15 @@ App Models
 Create your models in here
 """
 
-# Django
-from django.db import models
-from django.contrib.auth.models import User
-
-from allianceauth.eveonline.models import EveCharacter
+# Third Party
 from corptools.models import EveItemType
+
+# Django
+from django.contrib.auth.models import User
+from django.db import models
+
+# Alliance Auth
+from allianceauth.eveonline.models import EveCharacter
 
 
 class FarmingSkills(models.Model):
@@ -30,7 +33,9 @@ class CharacterFarmingSkill(models.Model):
         EveCharacter, on_delete=models.CASCADE, null=False, default=None
     )
     skill_id = models.IntegerField()
-    skill_name = models.ForeignKey(EveItemType, on_delete=models.CASCADE, null=True, default=None)
+    skill_name = models.ForeignKey(
+        EveItemType, on_delete=models.CASCADE, null=True, default=None
+    )
 
 
 class FarmingCharacters(models.Model):

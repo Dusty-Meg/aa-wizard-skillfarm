@@ -4,20 +4,16 @@ Example Test
 
 # Django
 from django.contrib.auth.models import User
-from django.test import TestCase, RequestFactory, Client
-from django_webtest import WebTest
+from django.test import RequestFactory, TestCase
 
 # Alliance Auth
-from allianceauth.authentication.models import (
-    CharacterOwnership,
-    UserProfile,
-    OwnershipRecord,
-)
+from allianceauth.authentication.models import CharacterOwnership, UserProfile
 from allianceauth.eveonline.models import EveCharacter
 from allianceauth.tests.auth_utils import AuthUtils
 
 from .. import models as local_models
-from .. import views as local_views
+
+# from .. import views as local_views
 
 
 class TestExample(TestCase):

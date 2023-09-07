@@ -6,7 +6,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import *
+# from .models import *
 
 
 @login_required
@@ -32,9 +32,7 @@ def characters(request: WSGIRequest) -> HttpResponse:
     :return:
     """
 
-    farming_characters = request.user.farmingcharacters
-
-
+    request.user.farmingcharacters
 
     context = {"text": "Hello, World!"}
 
