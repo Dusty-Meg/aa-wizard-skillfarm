@@ -3,13 +3,13 @@
 # Django
 # from django.utils.translation import gettext_lazy as _
 
-# # Alliance Auth
-# from allianceauth import hooks
-# from allianceauth.services.hooks import MenuItemHook, UrlHook
+# Alliance Auth
+from allianceauth import hooks
+from allianceauth.services.hooks import UrlHook
 
-# # AA Wizard Skill farm
-# from wizardskillfarm import urls
-
+# AA Wizard Skill Farm
+# AA Wizard Skill farm
+from wizardskillfarm import urls
 
 # class WizardSkillFarmMenuItem(MenuItemHook):
 #     """This class ensures only authorized users will see the menu entry"""
@@ -40,8 +40,8 @@
 #     return ExampleMenuItem()
 
 
-# @hooks.register("url_hook")
-# def register_urls():
-#     """Register app urls"""
+@hooks.register("url_hook")
+def register_urls():
+    """Register app urls"""
 
-#     return UrlHook(urls, "example", r"^example/")
+    return UrlHook(urls, "wizard-skillfarm", r"^wizard-skillfarm/")

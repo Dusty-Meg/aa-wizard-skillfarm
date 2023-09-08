@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("eveonline", "0017_alliance_and_corp_names_are_not_unique"),
-        ("corptools", "0091_assetsfilter_count_message_only_and_more"),
+        ("corptools", "0086_characterindustryjob"),
     ]
 
     operations = [
@@ -137,6 +137,15 @@ class Migration(migrations.Migration):
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         to="eveonline.evecharacter",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        default=None,
+                        null=True,
                     ),
                 ),
                 (

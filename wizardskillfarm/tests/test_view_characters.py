@@ -5,6 +5,7 @@ Example Test
 # Django
 from django.contrib.auth.models import User
 from django.test import RequestFactory, TestCase
+from django.urls import reverse
 
 # Alliance Auth
 from allianceauth.authentication.models import CharacterOwnership, UserProfile
@@ -17,7 +18,6 @@ from .. import models as local_models
 
 
 class TestExample(TestCase):
-    fixtures = ["disable_analytics"]
     """
     TestExample
     """
@@ -32,10 +32,12 @@ class TestExample(TestCase):
 
         userids = range(1, 4)
 
-        users = []
-        characters = []
+        cls.users = []
+        cls.characters = []
         for uid in userids:
-            user = AuthUtils.create_user(f"User_{uid}")
+            user = User.objects.create(username=f"User_{uid}")
+            user.set_password(f"Password_{uid}")
+            user.save()
             main_char = AuthUtils.add_main_character_2(
                 user,
                 f"Main {uid}",
@@ -49,6 +51,7 @@ class TestExample(TestCase):
             )
             local_models.FarmingCharacters.objects.create(
                 character=main_char,
+                user=user,
                 total_extract_sp=uid,
                 total_large_extractors=uid + 2,
             )
@@ -57,17 +60,26 @@ class TestExample(TestCase):
                 local_models.CharacterFarmingSkill.objects.create(
                     character=main_char, skill_id=skills
                 )
+            user = AuthUtils.add_permissions_to_user_by_name(
+                [
+                    "wizardskillfarm.basic_access",
+                ],
+                user,
+            )
+            user.save()
 
-            characters.append(main_char)
-            users.append(user)
+            cls.characters.append(main_char)
+            cls.users.append(user)
 
         super().setUpClass()
 
     def test_example(self):
-        self.app.set_user(self.users[0])
+        login = self.client.login(username="User_2", password="Password_2")
+        print(login)
 
-        page = self.app.get("/wizard-skillfarm/characters")
+        page = self.client.get(reverse("wizard-skillfarm:characters"))
 
         print(page)
+        print(page.context["model"])
 
         self.assertEqual(True, True)
