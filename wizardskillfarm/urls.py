@@ -11,4 +11,5 @@ app_name: str = "wizard-skillfarm"
 urlpatterns = [
     path("", views.index, name="index"),
     path("characters/", views.characters, name="characters"),
+    path("account_time/", views.account_time, name="account_time"),
 ]

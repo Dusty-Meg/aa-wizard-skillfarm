@@ -14,6 +14,15 @@ from django.db import models
 from allianceauth.eveonline.models import EveCharacter
 
 
+class AccountTimes(models.Model):
+    character = models.OneToOneField(EveCharacter, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="accounttimes"
+    )
+    expiry = models.DateField(null=False, default=None, blank=False)
+    type = models.CharField(max_length=200)
+
+
 class FarmingSkills(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, null=False, default=None
@@ -28,16 +37,6 @@ class ExcludedCharacterFarmingSkills(models.Model):
     skill_id = models.IntegerField()
 
 
-class CharacterFarmingSkill(models.Model):
-    character = models.ForeignKey(
-        EveCharacter, on_delete=models.CASCADE, null=False, default=None
-    )
-    skill_id = models.IntegerField()
-    skill_name = models.ForeignKey(
-        EveItemType, on_delete=models.CASCADE, null=True, default=None
-    )
-
-
 class FarmingCharacters(models.Model):
     character = models.OneToOneField(EveCharacter, on_delete=models.CASCADE)
     user = models.ForeignKey(
@@ -48,15 +47,31 @@ class FarmingCharacters(models.Model):
 
     last_update = models.DateTimeField(null=True, default=None, blank=True)
 
-    total_extract_sp = models.BigIntegerField()
     total_large_extractors = models.IntegerField()
 
     excluded_skills = models.ForeignKey(
         ExcludedCharacterFarmingSkills, on_delete=models.CASCADE, null=True
     )
 
-    farming_skills = models.ForeignKey(
-        CharacterFarmingSkill, on_delete=models.CASCADE, null=True
+
+class CharacterFarmingSkill(models.Model):
+    character = models.ForeignKey(
+        EveCharacter, on_delete=models.CASCADE, null=False, default=None
+    )
+    skill_type = models.ForeignKey(
+        EveItemType,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        default=None,
+    )
+    skill_level = models.IntegerField()
+    sp_in_skill = models.IntegerField()
+
+    farming_character = models.ForeignKey(
+        FarmingCharacters,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="farming_skills",
     )
 
 

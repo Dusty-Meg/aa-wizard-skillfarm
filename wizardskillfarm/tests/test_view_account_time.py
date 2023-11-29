@@ -2,8 +2,8 @@
 Example Test
 """
 
-# Third Party
-from corptools.models import EveItemType
+# Standard Library
+from datetime import datetime, timedelta, timezone
 
 # Django
 from django.contrib.auth.models import User
@@ -17,10 +17,12 @@ from allianceauth.tests.auth_utils import AuthUtils
 
 from .. import models as local_models
 
+# from corptools.models import CharacterAudit, EveItemType, SkillQueue
 
-class TestViewCharacter(TestCase):
+
+class TestViewAccountTime(TestCase):
     """
-    Test View Character
+    Test View Account Time
     """
 
     @classmethod
@@ -28,24 +30,13 @@ class TestViewCharacter(TestCase):
         cls.factory = RequestFactory()
         UserProfile.objects.all().delete()
         EveCharacter.objects.all().delete()
-        local_models.FarmingCharacters.objects.all().delete()
+        local_models.AccountTimes.objects.all().delete()
         User.objects.all().delete()
 
         userids = range(1, 4)
 
         cls.users = []
         cls.characters = []
-
-        skill_types = []
-
-        for skill_item in range(3340, 3344):
-            skill_types.append(
-                EveItemType.objects.create(
-                    type_id=skill_item,
-                    name=f"Teapot Test {skill_item}",
-                    published=True,
-                )
-            )
 
         for uid in userids:
             user = User.objects.create(username=f"User_{uid}")
@@ -62,20 +53,14 @@ class TestViewCharacter(TestCase):
             CharacterOwnership.objects.create(
                 user=user, character=main_char, owner_hash=f"main{uid}"
             )
-            local_farming_character = local_models.FarmingCharacters.objects.create(
+            local_models.AccountTimes.objects.create(
                 character=main_char,
                 user=user,
-                total_large_extractors=uid + 2,
+                type="Plex",
+                expiry=(datetime.utcnow() + timedelta(days=40)).replace(
+                    tzinfo=timezone.utc
+                ),
             )
-
-            for skills in range(1, 4):
-                local_models.CharacterFarmingSkill.objects.create(
-                    character=main_char,
-                    skill_type=skill_types[skills - 1],
-                    skill_level=3,
-                    sp_in_skill=200000,
-                    farming_character=local_farming_character,
-                )
 
             user = AuthUtils.add_permissions_to_user_by_name(
                 [
@@ -90,25 +75,12 @@ class TestViewCharacter(TestCase):
 
         super().setUpClass()
 
-    def test_can_get_model_with_full_context(self):
+    def test_can_get_model(self):
         self.client.login(username="User_2", password="Password_2")
 
-        page = self.client.get(reverse("wizard-skillfarm:characters"))
+        page = self.client.get(reverse("wizard-skillfarm:account_time"))
 
         context = page.context["model"]
 
         self.assertEqual(len(context.characters), 1)
-        self.assertEqual(context.characters[0].name, "Main 2")
-        self.assertEqual(len(context.characters[0].skills), 3)
-        self.assertEqual(context.characters[0].total_extract_sp(), 600000)
-
-    def test_can_get_model_with_no_characters(self):
-        local_models.FarmingCharacters.objects.all().delete()
-
-        self.client.login(username="User_2", password="Password_2")
-
-        page = self.client.get(reverse("wizard-skillfarm:characters"))
-
-        context = page.context["model"]
-
-        self.assertEqual(len(context.characters), 0)
+        self.assertEqual(context.characters[0].type, "Plex")

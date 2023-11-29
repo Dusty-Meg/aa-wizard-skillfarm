@@ -36,38 +36,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="CharacterFarmingSkill",
-            fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("skill_id", models.IntegerField()),
-                (
-                    "character",
-                    models.ForeignKey(
-                        default=None,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="eveonline.evecharacter",
-                    ),
-                ),
-                (
-                    "skill_name",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="corptools.eveitemtype",
-                    ),
-                ),
-            ],
-        ),
-        migrations.CreateModel(
             name="ExcludedCharacterFarmingSkills",
             fields=[
                 (
@@ -130,7 +98,6 @@ class Migration(migrations.Migration):
                     "last_update",
                     models.DateTimeField(blank=True, default=None, null=True),
                 ),
-                ("total_extract_sp", models.BigIntegerField()),
                 ("total_large_extractors", models.IntegerField()),
                 (
                     "character",
@@ -156,14 +123,82 @@ class Migration(migrations.Migration):
                         to="wizardskillfarm.excludedcharacterfarmingskills",
                     ),
                 ),
+            ],
+        ),
+        migrations.CreateModel(
+            name="CharacterFarmingSkill",
+            fields=[
                 (
-                    "farming_skills",
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("skill_level", models.IntegerField()),
+                ("sp_in_skill", models.IntegerField()),
+                (
+                    "character",
+                    models.ForeignKey(
+                        default=None,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="eveonline.evecharacter",
+                    ),
+                ),
+                (
+                    "skill_type",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        to="corptools.eveitemtype",
+                    ),
+                ),
+                (
+                    "farming_character",
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="wizardskillfarm.characterfarmingskill",
+                        to="wizardskillfarm.farmingcharacters",
                     ),
                 ),
+            ],
+        ),
+        migrations.CreateModel(
+            name="AccountTimes",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "expiry",
+                    models.DateTimeField(blank=False, default=None, null=False),
+                ),
+                (
+                    "character",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="eveonline.evecharacter",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        default=None,
+                        null=True,
+                    ),
+                ),
+                ("type", models.CharField(max_length=200)),
             ],
         ),
     ]
