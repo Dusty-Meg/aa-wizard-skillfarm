@@ -3,61 +3,60 @@
 {% load humanize %}
 
 {% block details %}
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="panel-title">{% translate "Paused Skill Queue" %}</div>
-        </div>
+{% include "wizardskillfarm/headingmenu.html" %}
 
-        <div class="panel-body">
-            {% if len(model.paused_skill_queue) > 0 %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Character Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for character in model.paused_skill_queue %}
-                    {
-                        <tr style="line-height: 10px" class="table-danger">
-                            <td>{{ character.name }}</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            {% endif %}
-            {{ text }}
-        </div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="panel-title">{% translate "Paused Skill Queue" %}</div>
     </div>
 
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="panel-title">{% translate "Low Skill Queues" %}</div>
-        </div>
-
-        <div class="panel-body">
-            {% if len(model.low_skill_queue) > 0 %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Character Name</th>
-                        <th>End of Skill Queue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for character in model.low_skill_queue %}
-                    {
-                        <tr style="line-height: 10px">
-                            <td>{{ character.name }}</td>
-                            <td>{{ character.skill_queue_end.strftime("%d/%m/%Y, %H:%M:%S") }}</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            {% endif %}
-            {{ text }}
-        </div>
+    <div class="panel-body">
+        {% if model.paused_skill_queue %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Character Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for character in model.paused_skill_queue %}
+                <tr style="line-height: 10px" class="table-danger">
+                    <td>{{ character.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="panel-title">{% translate "Low Skill Queues" %}</div>
+    </div>
+
+    <div class="panel-body">
+        {% if model.low_skill_queue %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Character Name</th>
+                    <th>End of Skill Queue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for character in model.low_skill_queue %}
+                <tr style="line-height: 10px">
+                    <td>{{ character.name }}</td>
+                    <td>{{ character.skill_queue_end|date:'d-m-Y H:i' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_javascript %}

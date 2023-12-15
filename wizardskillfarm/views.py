@@ -69,7 +69,7 @@ def index(request: WSGIRequest) -> HttpResponse:
 
     context = {"model": view_model}
 
-    return render(request, "example/index.html", context)
+    return render(request, "wizardskillfarm/index.html", context)
 
 
 @login_required
@@ -103,12 +103,12 @@ def characters(request: WSGIRequest) -> HttpResponse:
 
     context = {"model": view_model}
 
-    return render(request, "example/index.html", context)
+    return render(request, "wizardskillfarm/characters.html", context)
 
 
 @login_required
 @permission_required("wizardskillfarm.basic_access")
-def account_time(request: WSGIRequest) -> HttpResponse:
+def omega_time(request: WSGIRequest) -> HttpResponse:
     """
     Index view
     :param request:
@@ -129,4 +129,4 @@ def account_time(request: WSGIRequest) -> HttpResponse:
 
     context = {"model": view_model}
 
-    return render(request, "example/index.html", context)
+    return render(request, "wizardskillfarm/omegatime.html", context)
