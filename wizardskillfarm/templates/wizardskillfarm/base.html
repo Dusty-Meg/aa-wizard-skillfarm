@@ -1,12 +1,30 @@
-{% extends 'allianceauth/base.html' %}
+{% extends 'allianceauth/base-bs5.html' %}
 {% load i18n %}
 
-{% block page_title %}{% translate "Wizard Skill Farm" %}{% endblock %}
+{% block page_title %}
+    {% translate "Wizard Skill Farm" %}
+{% endblock %}
+
+{% block header_nav_brand %}
+    {% translate "Wizard Skill Farm" %}
+{% endblock header_nav_brand %}
 
 {% block content %}
     <div class="allianceauth-wizard-skillfarm-plugin">
-        <h1 class="page-header text-center">{% translate "Wizard Skill Farm" %}</h1>
-
         {% block details %}{% endblock %}
     </div>
+{% endblock %}
+
+{% block header_nav_collapse_left %}
+<div class="collapse navbar-collapse" id="market-manager-navbar-collapse-1">
+    <li class="nav-item ">
+        <a class="nav-link" href="/wizard-skillfarm/settings">{% translate "Settings" %}</a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="/wizard-skillfarm/omega_time">{% translate "Omega Time" %}</a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="/wizard-skillfarm/characters">{% translate "Characters" %}</a>
+    </li>
+</div>
 {% endblock %}

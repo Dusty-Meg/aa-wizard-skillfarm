@@ -1,0 +1,126 @@
+{% extends 'wizardskillfarm/base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+{% block details %}
+
+
+<form method="POST" id="form">
+    {% csrf_token %}
+<div class="container">
+    <br />
+    <div class="row">
+        <div class="col-md-5">
+            <select name="from" id="search" class="form-control" size="8" multiple="multiple">
+                {% if model.not_included_characters %}
+                    {% for character in model.not_included_characters %}
+                    <option value='{{ character.name }}'>{{ character.name }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <div class="d-grid gap-2">
+                <button type="button" id="search_rightAll" class="btn btn-primary"><i class="bi bi-fast-forward"></i></button>
+                <button type="button" id="search_rightSelected" class="btn btn-primary"><i class="bi bi-chevron-right"></i></button>
+                <button type="button" id="search_leftSelected" class="btn btn-primary"><i class="bi bi-chevron-left"></i></button>
+                <button type="button" id="search_leftAll" class="btn btn-primary"><i class="bi bi-rewind"></i></button>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <select name="to" id="search_to" class="form-control" size="8" multiple="multiple">
+                {% if model.included_characters %}
+                    {% for character in model.included_characters %}
+                    <option value='{{ character.name }}'>{{ character.name }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-10">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</div>
+</form>
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="https://rawgit.com/crlcu/multiselect/master/dist/js/multiselect.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#search').multiselect({
+            search: {
+                left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            },
+            fireSearch: function(value) {
+                return value.length > 3;
+            }
+        });
+    });
+    </script>
+
+<!-- <script type="application/javascript">
+$(function () {
+
+    $('body').on('click', '.list-group .list-group-item', function () {
+        $(this).toggleClass('active');
+    });
+    $('.list-arrows button').click(function () {
+        var $button = $(this), actives = '';
+        if ($button.hasClass('move-left')) {
+            actives = $('.list-right ul li.active');
+            jQuery.each(actives, function(index, item) {
+                $(this).html($(this).html().replace("included_characters", "not_included_characters"));
+            });
+            actives.clone().appendTo('.list-left ul');
+            actives.remove();
+        } else if ($button.hasClass('move-right')) {
+            actives = $('.list-left ul li.active');
+            jQuery.each(actives, function(index, item) {
+                $(this).html($(this).html().replace("not_included_characters", "included_characters"));
+            });
+            actives.clone().appendTo('.list-right ul');
+            actives.remove();
+        }
+    });
+    $('.dual-list .selector').click(function () {
+        var $checkBox = $(this);
+        if (!$checkBox.hasClass('selected')) {
+            $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
+            $checkBox.children('i').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+        } else {
+            $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
+            $checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+        }
+    });
+    $('[name="SearchDualList"]').keyup(function (e) {
+        var code = e.keyCode || e.which;
+        if (code == '9') return;
+        if (code == '27') $(this).val(null);
+        var $rows = $(this).closest('.dual-list').find('.list-group li');
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+        $rows.show().filter(function () {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+
+});
+
+
+</script> -->
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block extra_script %}
+{% endblock %}

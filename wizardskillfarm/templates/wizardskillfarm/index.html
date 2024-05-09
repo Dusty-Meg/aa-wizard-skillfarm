@@ -3,15 +3,14 @@
 {% load humanize %}
 
 {% block details %}
-{% include "wizardskillfarm/headingmenu.html" %}
 
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <div class="panel-title">{% translate "Paused Skill Queue" %}</div>
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">{% translate "Paused Skill Queue" %}</div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         {% if model.paused_skill_queue %}
         <table class="table table-striped">
             <thead>
@@ -31,12 +30,12 @@
     </div>
 </div>
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <div class="panel-title">{% translate "Low Skill Queues" %}</div>
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">{% translate "Low Skill Queues" %}</div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         {% if model.low_skill_queue %}
         <table class="table table-striped">
             <thead>
@@ -66,4 +65,7 @@
 {% endblock %}
 
 {% block extra_script %}
+<script src="https://raw.github.com/crlcu/multiselect/master/dist/js/multiselect.min.js"></script>
 {% endblock %}
+
+<script src="https://raw.github.com/crlcu/multiselect/master/dist/js/multiselect.min.js"></script>

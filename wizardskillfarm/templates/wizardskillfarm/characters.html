@@ -3,14 +3,13 @@
 {% load humanize %}
 
 {% block details %}
-{% include "wizardskillfarm/headingmenu.html" %}
 
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <div class="panel-title">{% translate "Omega Time" %}</div>
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">{% translate "Omega Time" %}</div>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         {% if model.characters %}
         <table class="table table-striped">
             <thead>

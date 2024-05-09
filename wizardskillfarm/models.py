@@ -40,7 +40,7 @@ class ExcludedCharacterFarmingSkills(models.Model):
 class FarmingCharacters(models.Model):
     character = models.OneToOneField(EveCharacter, on_delete=models.CASCADE)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="farmingcharacters"
+        User, on_delete=models.CASCADE, related_name="farmingcharacters", unique=False
     )
 
     active = models.BooleanField(default=True)

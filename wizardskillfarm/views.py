@@ -4,13 +4,15 @@
 from datetime import datetime, timezone
 
 # Third Party
-from corptools.models import SkillQueue
+from corptools.models import CharacterAudit, SkillQueue
 
 # Django
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from .models import FarmingCharacters
 
 # from .models import *
 from .view_models import (
@@ -21,6 +23,8 @@ from .view_models import (
     characters_main,
     index_main,
     index_skill_queue,
+    settings_characters_character,
+    settings_characters_main,
 )
 
 
@@ -42,7 +46,11 @@ def index(request: WSGIRequest) -> HttpResponse:
             character__character=character.character
         ).latest("queue_position")
 
-        days_between_now_and_start = datetime.now(timezone.utc) - last_skill.start_date
+        days_between_now_and_start = (
+            datetime.now(timezone.utc) - last_skill.start_date
+            if last_skill.start_date is not None
+            else 9000
+        )
 
         if last_skill.finish_date is not None:
             days_between_now_and_end = (
@@ -130,3 +138,67 @@ def omega_time(request: WSGIRequest) -> HttpResponse:
     context = {"model": view_model}
 
     return render(request, "wizardskillfarm/omegatime.html", context)
+
+
+@login_required
+@permission_required("wizardskillfarm.basic_access")
+def settings_characters(request: WSGIRequest) -> HttpResponse:
+    if request.method == "POST":
+        included_characters = FarmingCharacters.objects.filter(user=request.user)
+        all_characters = CharacterAudit.objects.visible_to(request.user)
+
+        post_data = request.POST.getlist("to")
+
+        for included_char in included_characters:
+            found = False
+            for post_characters in post_data:
+                if included_char.character.character_name == post_characters:
+                    found = True
+            if not found:
+                FarmingCharacters.objects.filter(
+                    character=included_char.character
+                ).delete()
+
+        for post_characters in post_data:
+            for included_char in all_characters:
+                if included_char.character.character_name == post_characters:
+                    character, created = FarmingCharacters.objects.get_or_create(
+                        character_id=included_char.character_id,
+                        defaults={
+                            "character": included_char.character,
+                            "user": request.user,
+                            "total_large_extractors": 0,
+                        },
+                    )
+
+                    if created:
+                        character.save()
+        return redirect("/wizard-skillfarm/settings/characters")
+
+    all_characters = CharacterAudit.objects.visible_to(request.user)
+    included_characters = FarmingCharacters.objects.filter(user=request.user)
+
+    view_model = settings_characters_main()
+
+    for char in all_characters:
+        model = settings_characters_character()
+        model.name = char.character.character_name
+        model.id = char.character.character_id
+
+        found = False
+        for included_char in included_characters:
+            if model.id == included_char.character.character_id:
+                found = True
+
+        if found is False:
+            view_model.not_included_characters.append(model)
+
+    for char in included_characters:
+        model = settings_characters_character()
+        model.name = char.character.character_name
+        model.id = char.character.character_id
+        view_model.included_characters.append(model)
+
+    context = {"model": view_model}
+
+    return render(request, "wizardskillfarm/settings/characters.html", context)
