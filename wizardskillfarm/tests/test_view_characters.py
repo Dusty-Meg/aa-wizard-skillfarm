@@ -42,6 +42,7 @@ class TestViewCharacter(TestCase):
 
         EveCategory.objects.create(
             id=2,
+            published=True,
         )
 
         EveGroup.objects.create(
