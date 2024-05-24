@@ -14,5 +14,5 @@ urlpatterns = [
     path("omegatime/", views.omega_time, name="omegatime"),
     path("settings/characters", views.settings_characters, name="settings_characters"),
     path("settings/skills", views.settings_skills, name="settings_skills"),
-    path("settings/omegatime", views.settings_skills, name="settings_omegatime"),
+    path("settings/omegatime", views.settings_omegatime, name="settings_omegatime"),
 ]
