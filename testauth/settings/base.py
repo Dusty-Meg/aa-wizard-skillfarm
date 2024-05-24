@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "allianceauth.theme.darkly",
     "allianceauth.theme.flatly",
     "allianceauth.theme.materia",
+    "eveuniverse",
+    "corptools",
 ]
 
 PACKAGE = "wizardskillfarm"

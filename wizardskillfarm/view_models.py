@@ -58,9 +58,15 @@ class index_main:
     def __init__(self):
         self.low_skill_queue = []
         self.paused_skill_queue = []
+        self.has_characters = False
+        self.has_skills = False
+        self.has_omega = False
 
     low_skill_queue: List[index_skill_queue]
     paused_skill_queue: List[index_skill_queue]
+    has_characters: bool
+    has_skills: bool
+    has_omega: bool
 
 
 @dataclass

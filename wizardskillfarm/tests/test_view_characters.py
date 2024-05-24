@@ -3,7 +3,6 @@ Example Test
 """
 
 # Third Party
-from corptools.models import EveItemType
 
 # Django
 from django.contrib.auth.models import User
@@ -14,6 +13,9 @@ from django.urls import reverse
 from allianceauth.authentication.models import CharacterOwnership, UserProfile
 from allianceauth.eveonline.models import EveCharacter
 from allianceauth.tests.auth_utils import AuthUtils
+
+# Alliance Auth (External Libs)
+from eveuniverse.models import EveCategory, EveGroup, EveType
 
 from .. import models as local_models
 
@@ -38,12 +40,24 @@ class TestViewCharacter(TestCase):
 
         skill_types = []
 
+        EveCategory.objects.create(
+            id=2,
+            published=True,
+        )
+
+        EveGroup.objects.create(
+            id=2,
+            published=True,
+            eve_category_id=2,
+        )
+
         for skill_item in range(3340, 3344):
             skill_types.append(
-                EveItemType.objects.create(
-                    type_id=skill_item,
+                EveType.objects.create(
+                    id=skill_item,
                     name=f"Teapot Test {skill_item}",
                     published=True,
+                    eve_group_id=2,
                 )
             )
 

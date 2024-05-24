@@ -78,7 +78,7 @@ class TestViewAccountTime(TestCase):
     def test_can_get_model(self):
         self.client.login(username="User_2", password="Password_2")
 
-        page = self.client.get(reverse("wizard-skillfarm:account_time"))
+        page = self.client.get(reverse("wizard-skillfarm:omegatime"))
 
         context = page.context["model"]
 
