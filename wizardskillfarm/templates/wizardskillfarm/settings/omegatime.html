@@ -150,6 +150,10 @@
             }
         });
     });
+
+    $('#form').on('submit', function() {
+        $('#search').prop('disabled', true);
+    });
     </script>
 {% endblock %}
 
