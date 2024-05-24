@@ -15,7 +15,7 @@ from allianceauth.eveonline.models import EveCharacter
 from allianceauth.tests.auth_utils import AuthUtils
 
 # Alliance Auth (External Libs)
-from eveuniverse.models import EveType, EveGroup
+from eveuniverse.models import EveGroup, EveType
 
 from .. import models as local_models
 
