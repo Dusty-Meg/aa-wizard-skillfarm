@@ -1,14 +1,16 @@
 """Hook into Alliance Auth"""
 
 # Django
-from django.utils.translation import gettext_lazy as _
+# from django.utils.translation import gettext_lazy as _
 
 # Alliance Auth
 from allianceauth import hooks
-from allianceauth.services.hooks import UrlHook, MenuItemHook
+from allianceauth.services.hooks import MenuItemHook, UrlHook
 
+# AA Wizard Skill Farm
 # AA Wizard Skill farm
 from wizardskillfarm import urls
+
 
 class WizardSkillFarmMenuItem(MenuItemHook):
     """This class ensures only authorized users will see the menu entry"""
