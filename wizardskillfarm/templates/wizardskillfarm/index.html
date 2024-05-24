@@ -6,6 +6,29 @@
 
 
 <div class="card card-primary">
+
+    {% if not model.has_characters %}
+    <div class="alert alert-primary" role="alert">
+        You currently have no characters configured!
+        Go to <a href="settings/characters">Settings > Characters</a> to add characters to monitor.
+    </div>      
+    {% endif %}
+
+    {% if not model.has_skills %}
+    <div class="alert alert-primary" role="alert">
+        You currently have no skills configured!
+        Go to <a href="settings/skills">Settings > Skills</a> to add skills to monitor.
+    </div>      
+    {% endif %}
+
+    {% if not model.has_omega %}
+    <div class="alert alert-primary" role="alert">
+        You currently have no characters confirgured with Omega Time!
+        Go to <a href="settings/omegatime">Settings > Omega Time</a> to add omega time to monitor.
+    </div>      
+    {% endif %}
+
+
     <div class="card-header">
         <div class="card-title">{% translate "Paused Skill Queue" %}</div>
     </div>

@@ -53,6 +53,12 @@ def index(request: WSGIRequest) -> HttpResponse:
     view_model = index_main()
 
     farming_characters = request.user.farmingcharacters.all()
+    farming_skills = request.user.farmingskills.all()
+    farming_omega = request.user.accounttimes.all()
+
+    view_model.has_characters = farming_characters
+    view_model.has_skills = farming_skills
+    view_model.has_omega = farming_omega
 
     for character in farming_characters:
         last_skill = SkillQueue.objects.filter(
