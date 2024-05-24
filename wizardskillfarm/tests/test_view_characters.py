@@ -46,7 +46,7 @@ class TestViewCharacter(TestCase):
                     id=skill_item,
                     name=f"Teapot Test {skill_item}",
                     published=True,
-                    eve_group_id=2
+                    eve_group_id=2,
                 )
             )
 
