@@ -16,23 +16,21 @@
 {% endblock %}
 
 {% block header_nav_collapse_left %}
-<div class="collapse navbar-collapse" id="market-manager-navbar-collapse-1">
-    <li class="nav-item">
-        <a class="nav-link" href="/wizard-skillfarm">{% translate "Main" %}</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/wizard-skillfarm/characters">{% translate "Characters" %}</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/wizard-skillfarm/omegatime">{% translate "Omega Time" %}</a>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{% translate "Settings" %}</a>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/wizard-skillfarm/settings/characters">{% translate "Characters" %}</a></li>
-            <li><a class="dropdown-item" href="/wizard-skillfarm/settings/skills">{% translate "Skills" %}</a></li>
-            <li><a class="dropdown-item" href="/wizard-skillfarm/settings/omegatime">{% translate "Omega Time" %}</a></li>
-        </ul>
-    </li>
-</div>
+<li class="nav-item">
+    <a class="nav-link" href="/wizard-skillfarm">{% translate "Main" %}</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/wizard-skillfarm/characters">{% translate "Characters" %}</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/wizard-skillfarm/omegatime">{% translate "Omega Time" %}</a>
+</li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{% translate "Settings" %}</a>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/wizard-skillfarm/settings/characters">{% translate "Characters" %}</a></li>
+        <li><a class="dropdown-item" href="/wizard-skillfarm/settings/skills">{% translate "Skills" %}</a></li>
+        <li><a class="dropdown-item" href="/wizard-skillfarm/settings/omegatime">{% translate "Omega Time" %}</a></li>
+    </ul>
+</li>
 {% endblock %}
