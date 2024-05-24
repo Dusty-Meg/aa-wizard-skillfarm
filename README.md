@@ -12,4 +12,4 @@ ______________________________________________________________________
 
 Basic skill farming helper designed to piggyback off allianceauth-corptools.
 Requires django-eveuniverse to also be installed.
-Run `python manage.py eveuniverse_load_data types` after installation to populate the skills list.
+Run `python manage.py eveuniverse_load_data types --types-enabled-sections market_groups` after installation to populate the skills list.
