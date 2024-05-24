@@ -10,7 +10,7 @@ Test settings
 
 from .base import *
 
-PACKAGE = "wizard-skillfarm"
+PACKAGE = "wizardskillfarm"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
