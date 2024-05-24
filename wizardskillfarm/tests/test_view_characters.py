@@ -3,7 +3,7 @@ Example Test
 """
 
 # Third Party
-from corptools.models import EveItemType
+from eveuniverse.models import EveType
 
 # Django
 from django.contrib.auth.models import User
@@ -40,7 +40,7 @@ class TestViewCharacter(TestCase):
 
         for skill_item in range(3340, 3344):
             skill_types.append(
-                EveItemType.objects.create(
+                EveType.objects.create(
                     type_id=skill_item,
                     name=f"Teapot Test {skill_item}",
                     published=True,
