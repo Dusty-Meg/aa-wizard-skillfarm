@@ -15,7 +15,7 @@ from allianceauth.eveonline.models import EveCharacter
 from allianceauth.tests.auth_utils import AuthUtils
 
 # Alliance Auth (External Libs)
-from eveuniverse.models import EveType
+from eveuniverse.models import EveType, EveGroup
 
 from .. import models as local_models
 
@@ -39,6 +39,11 @@ class TestViewCharacter(TestCase):
         cls.characters = []
 
         skill_types = []
+
+        EveGroup.objects.create(
+            id = 2,
+            published = True,   
+        )
 
         for skill_item in range(3340, 3344):
             skill_types.append(
