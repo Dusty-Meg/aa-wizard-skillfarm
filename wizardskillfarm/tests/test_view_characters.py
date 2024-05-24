@@ -3,7 +3,6 @@ Example Test
 """
 
 # Third Party
-from eveuniverse.models import EveType
 
 # Django
 from django.contrib.auth.models import User
@@ -14,6 +13,9 @@ from django.urls import reverse
 from allianceauth.authentication.models import CharacterOwnership, UserProfile
 from allianceauth.eveonline.models import EveCharacter
 from allianceauth.tests.auth_utils import AuthUtils
+
+# Alliance Auth (External Libs)
+from eveuniverse.models import EveType
 
 from .. import models as local_models
 
