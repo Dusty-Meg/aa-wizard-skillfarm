@@ -43,7 +43,7 @@ class TestViewCharacter(TestCase):
         for skill_item in range(3340, 3344):
             skill_types.append(
                 EveType.objects.create(
-                    type_id=skill_item,
+                    id=skill_item,
                     name=f"Teapot Test {skill_item}",
                     published=True,
                 )
