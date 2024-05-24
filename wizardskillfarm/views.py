@@ -61,13 +61,11 @@ def index(request: WSGIRequest) -> HttpResponse:
     view_model.has_omega = farming_omega
 
     for character in farming_characters:
-        last_skill = SkillQueue.objects.filter(
-            character__character=character.character
-        )
+        last_skill = SkillQueue.objects.filter(character__character=character.character)
 
         if not last_skill:
             continue
-        
+
         last_skill = last_skill.latest("queue_position")
 
         days_between_now_and_start = (
