@@ -29,9 +29,7 @@ def update_farming_characters():
     for user in all_users:
         if len(user.farmingcharacters.all()) > 0:
             for character in user.farmingcharacters.all():
-                update_farming_character.apply_async(
-                    args=[character.character_id, user.id]
-                )
+                update_farming_character.delay(character.character_id, user.id)
 
 
 def getSpInSkill(activeLevel, skill):
