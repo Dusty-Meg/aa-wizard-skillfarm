@@ -42,7 +42,7 @@ class TestViewCharacter(TestCase):
 
         EveGroup.objects.create(
             id=2,
-            published=True,   
+            published=True,
         )
 
         for skill_item in range(3340, 3344):
