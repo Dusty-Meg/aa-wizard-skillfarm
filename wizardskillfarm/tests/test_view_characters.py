@@ -41,8 +41,8 @@ class TestViewCharacter(TestCase):
         skill_types = []
 
         EveGroup.objects.create(
-            id = 2,
-            published = True,   
+            id=2,
+            published=True,   
         )
 
         for skill_item in range(3340, 3344):
