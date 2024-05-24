@@ -1,4 +1,3 @@
-
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
@@ -129,5 +128,5 @@ at [https://www.contributor-covenant.org/translations][translations].
 [faq]: https://www.contributor-covenant.org/faq
 [homepage]: https://www.contributor-covenant.org
 [mozilla coc]: https://github.com/mozilla/diversity
-[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
 [translations]: https://www.contributor-covenant.org/translations
+[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
