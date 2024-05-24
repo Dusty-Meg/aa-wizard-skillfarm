@@ -69,6 +69,7 @@ class account_time_character:
         self.name = ""
 
     name: str
+    id: str
     type: str
     expiry: datetime.datetime
 
@@ -99,3 +100,45 @@ class settings_characters_main:
 
     not_included_characters: List[settings_characters_character]
     included_characters: List[settings_characters_character]
+
+
+@dataclass
+class settings_skills_skill:
+    def __init__(self):
+        self.name = ""
+        self.id = ""
+
+    name: str
+    id: str
+
+
+@dataclass
+class settings_skills_main:
+    def __init__(self):
+        self.not_included_skills = []
+        self.included_skills = []
+
+    not_included_skills: List[settings_skills_skill]
+    included_skills: List[settings_skills_skill]
+
+
+@dataclass
+class settings_omegatime_character:
+    def __init__(self):
+        self.name = ""
+
+    name: str
+    id: str
+    expiry: datetime.datetime
+
+
+@dataclass
+class settings_omegatime_main:
+    def __init__(self):
+        self.not_included_characters = []
+        self.omega_characters = []
+        self.mct_characters = []
+
+    not_included_characters: List[settings_omegatime_character]
+    omega_characters: List[settings_omegatime_character]
+    mct_characters: List[settings_omegatime_character]

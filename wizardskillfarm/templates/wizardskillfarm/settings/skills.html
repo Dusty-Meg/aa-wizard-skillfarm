@@ -12,26 +12,28 @@
     <div class="row">
         <div class="col-md-5">
             <select name="from" id="search" class="form-control" size="8" multiple="multiple">
-                {% if model.not_included_characters %}
-                    {% for character in model.not_included_characters %}
-                    <option value='{{ character.name }}'>{{ character.name }}</option>
+                {% if model.not_included_skills %}
+                    {% for skill in model.not_included_skills %}
+                    <option value='{{ skill.name }}'>{{ skill.name }}</option>
                     {% endfor %}
                 {% endif %}
             </select>
         </div>
 
-        <div class="col-md-2 d-grid gap-2">
-            <button type="button" id="search_rightAll" class="btn btn-primary"><i class="bi bi-fast-forward"></i></button>
-            <button type="button" id="search_rightSelected" class="btn btn-primary"><i class="bi bi-chevron-right"></i></button>
-            <button type="button" id="search_leftSelected" class="btn btn-primary"><i class="bi bi-chevron-left"></i></button>
-            <button type="button" id="search_leftAll" class="btn btn-primary"><i class="bi bi-rewind"></i></button>
+        <div class="col-md-2">
+            <div class="d-grid gap-2">
+                <button type="button" id="search_rightAll" class="btn btn-primary"><i class="bi bi-fast-forward"></i></button>
+                <button type="button" id="search_rightSelected" class="btn btn-primary"><i class="bi bi-chevron-right"></i></button>
+                <button type="button" id="search_leftSelected" class="btn btn-primary"><i class="bi bi-chevron-left"></i></button>
+                <button type="button" id="search_leftAll" class="btn btn-primary"><i class="bi bi-rewind"></i></button>
+            </div>
         </div>
 
         <div class="col-md-5">
             <select name="to" id="search_to" class="form-control" size="8" multiple="multiple">
-                {% if model.included_characters %}
-                    {% for character in model.included_characters %}
-                    <option value='{{ character.name }}'>{{ character.name }}</option>
+                {% if model.included_skills %}
+                    {% for skill in model.included_skills %}
+                    <option value='{{ skill.name }}'>{{ skill.name }}</option>
                     {% endfor %}
                 {% endif %}
             </select>

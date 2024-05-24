@@ -4,7 +4,6 @@ Create your models in here
 """
 
 # Third Party
-from corptools.models import EveItemType
 
 # Django
 from django.contrib.auth.models import User
@@ -13,21 +12,29 @@ from django.db import models
 # Alliance Auth
 from allianceauth.eveonline.models import EveCharacter
 
+# Alliance Auth (External Libs)
+from eveuniverse.models import EveType
+
 
 class AccountTimes(models.Model):
-    character = models.OneToOneField(EveCharacter, on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="accounttimes"
+    character = models.OneToOneField(
+        EveCharacter, on_delete=models.CASCADE, null=False, default=None
     )
-    expiry = models.DateField(null=False, default=None, blank=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="accounttimes", unique=False
+    )
+    expiry = models.DateTimeField(null=False, default=None, blank=False)
     type = models.CharField(max_length=200)
 
 
 class FarmingSkills(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, null=False, default=None
+        User, on_delete=models.CASCADE, related_name="farmingskills", unique=False
     )
     skill_id = models.IntegerField()
+    skill_type = models.ForeignKey(
+        EveType, on_delete=models.CASCADE, related_name="farmingskills", unique=False
+    )
 
 
 class ExcludedCharacterFarmingSkills(models.Model):
@@ -59,10 +66,7 @@ class CharacterFarmingSkill(models.Model):
         EveCharacter, on_delete=models.CASCADE, null=False, default=None
     )
     skill_type = models.ForeignKey(
-        EveItemType,
-        on_delete=models.DO_NOTHING,
-        null=True,
-        default=None,
+        EveType, on_delete=models.DO_NOTHING, unique=False, null=True, default=None
     )
     skill_level = models.IntegerField()
     sp_in_skill = models.IntegerField()

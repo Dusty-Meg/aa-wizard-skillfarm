@@ -1,7 +1,7 @@
 """App Views"""
 
 # Standard Library
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 # Third Party
 from corptools.models import CharacterAudit, SkillQueue
@@ -11,8 +11,12 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.template.defaulttags import register
 
-from .models import FarmingCharacters
+# Alliance Auth (External Libs)
+from eveuniverse.models import EveType
+
+from .models import AccountTimes, FarmingCharacters, FarmingSkills
 
 # from .models import *
 from .view_models import (
@@ -25,7 +29,16 @@ from .view_models import (
     index_skill_queue,
     settings_characters_character,
     settings_characters_main,
+    settings_omegatime_character,
+    settings_omegatime_main,
+    settings_skills_main,
+    settings_skills_skill,
 )
+
+
+@register.filter
+def get_range(stop):
+    return range(0, stop)
 
 
 @login_required
@@ -101,7 +114,7 @@ def characters(request: WSGIRequest) -> HttpResponse:
 
         for skill in char.farming_skills.all():
             view_skill = characters_character_skill()
-            view_skill.skill_id = skill.skill_type.type_id
+            view_skill.skill_id = skill.skill_type.id
             view_skill.skill_name = skill.skill_type.name
             view_skill.skill_level = skill.skill_level
             view_skill.sp_in_skill = skill.sp_in_skill
@@ -123,13 +136,30 @@ def omega_time(request: WSGIRequest) -> HttpResponse:
     :return:
     """
 
+    if request.method == "POST":
+        account_times = AccountTimes.objects.filter(user=request.user).filter(
+            character__character_id=request.POST.get("characterId")
+        )
+
+        if account_times is not None and len(account_times) == 1:
+            new_expiry = datetime.strptime(
+                f"{request.POST.get('date')} {request.POST.get('time')}",
+                "%Y-%m-%d %H:%M",
+            )
+            account_times[0].expiry = new_expiry + timedelta(
+                days=(int(request.POST.get("units")) * 30)
+            )
+            account_times[0].save()
+        return HttpResponse(status=200)
+
     view_model = account_time_main()
 
-    account_times = request.user.accounttimes.all()
+    account_times = AccountTimes.objects.filter(user=request.user)
 
     for char in account_times:
         view_char = account_time_character()
         view_char.name = char.character.character_name
+        view_char.id = char.character.character_id
         view_char.type = char.type
         view_char.expiry = char.expiry
 
@@ -202,3 +232,160 @@ def settings_characters(request: WSGIRequest) -> HttpResponse:
     context = {"model": view_model}
 
     return render(request, "wizardskillfarm/settings/characters.html", context)
+
+
+@login_required
+@permission_required("wizardskillfarm.basic_access")
+def settings_skills(request: WSGIRequest) -> HttpResponse:
+
+    if request.method == "POST":
+        all_skills = (
+            EveType.objects.filter(icon_id=33)
+            .filter(published=True)
+            .filter(eve_market_group__isnull=False)
+        )
+        included_skills = FarmingSkills.objects.filter(user=request.user)
+
+        post_data = request.POST.getlist("to")
+
+        for included_skill in included_skills:
+            found = False
+            for post_skills in post_data:
+                if included_skill.skill_type.name == post_skills:
+                    found = True
+            if not found:
+                FarmingSkills.objects.filter(skill_id=included_skill.skill_id).delete()
+
+        for post_skills in post_data:
+            for included_skill in all_skills:
+                if included_skill.name == post_skills:
+                    skills, created = FarmingSkills.objects.get_or_create(
+                        skill_id=included_skill.id,
+                        defaults={
+                            "user": request.user,
+                            "skill_type_id": included_skill.id,
+                        },
+                    )
+
+                    if created:
+                        skills.save()
+        return redirect("/wizard-skillfarm/settings/skills")
+
+    all_skills = (
+        EveType.objects.filter(icon_id=33)
+        .filter(published=True)
+        .filter(eve_market_group__isnull=False)
+    )
+    included_skills = FarmingSkills.objects.filter(user=request.user)
+
+    view_model = settings_skills_main()
+
+    for skill in all_skills:
+        model = settings_skills_skill()
+        model.name = skill.name
+        model.id = skill.id
+
+        found = False
+        for included_skill in included_skills:
+            if model.id == included_skill.skill_id:
+                found = True
+
+        if found is False:
+            view_model.not_included_skills.append(model)
+
+    for skill in included_skills:
+        model = settings_skills_skill()
+        model.name = skill.skill_type.name
+        model.id = skill.id
+        view_model.included_skills.append(model)
+
+    context = {"model": view_model}
+
+    return render(request, "wizardskillfarm/settings/skills.html", context)
+
+
+@login_required
+@permission_required("wizardskillfarm.basic_access")
+def settings_omegatime(request: WSGIRequest) -> HttpResponse:
+    if request.method == "POST":
+        all_characters = CharacterAudit.objects.visible_to(request.user)
+        account_times = AccountTimes.objects.filter(user=request.user)
+
+        post_data_omega = request.POST.getlist("to")
+        post_data_mct = request.POST.getlist("to_2")
+
+        for included_char in account_times:
+            found = False
+            for post_characters in post_data_omega:
+                if included_char.character.character_name == post_characters:
+                    found = True
+            for post_characters in post_data_mct:
+                if included_char.character.character_name == post_characters:
+                    found = True
+            if not found:
+                AccountTimes.objects.filter(character=included_char.character).delete()
+
+        for post_characters in post_data_omega:
+            for included_char in all_characters:
+                if included_char.character.character_name == post_characters:
+                    character, created = AccountTimes.objects.get_or_create(
+                        character_id=included_char.character_id,
+                        defaults={
+                            "character": included_char.character,
+                            "user": request.user,
+                            "type": "omega",
+                            "expiry": datetime.now(timezone.utc),
+                        },
+                    )
+
+                    if created:
+                        character.save()
+
+        for post_characters in post_data_mct:
+            for included_char in all_characters:
+                if included_char.character.character_name == post_characters:
+                    character, created = AccountTimes.objects.get_or_create(
+                        character_id=included_char.character_id,
+                        defaults={
+                            "character": included_char.character,
+                            "user": request.user,
+                            "type": "mct",
+                            "expiry": datetime.now(timezone.utc),
+                        },
+                    )
+
+                    if created:
+                        character.save()
+        return redirect("/wizard-skillfarm/settings/omegatime")
+
+    all_characters = CharacterAudit.objects.visible_to(request.user)
+    account_times = AccountTimes.objects.filter(user=request.user)
+
+    view_model = settings_omegatime_main()
+
+    for char in all_characters:
+        model = settings_omegatime_character()
+        model.name = char.character.character_name
+        model.id = char.character.character_id
+
+        found = False
+        for included_char in account_times:
+            if model.id == included_char.character.character_id:
+                found = True
+
+        if found is False:
+            view_model.not_included_characters.append(model)
+
+    for char in account_times:
+        model = settings_omegatime_character()
+        model.name = char.character.character_name
+        model.id = char.character.character_id
+
+        if char.type == "omega":
+            view_model.omega_characters.append(model)
+        elif char.type == "mct":
+            view_model.mct_characters.append(model)
+
+    context = {"model": view_model}
+
+    return render(request, "wizardskillfarm/settings/omegatime.html", context)

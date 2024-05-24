@@ -23,9 +23,9 @@
                     {% for character in model.characters %}
                         <tr style="line-height: 10px" class=@character.Warning>
                             <td>{{ character.name }}</td>
-                            <td>{{ character.expiry|date:'d-m-Y H:i' }}</td>
+                            <td>{{ character.expiry|date:'d-m-Y' }} {{ character.expiry|time:'H:i' }}</td>
                             <td>{{ character.type }}</td>
-                            <!-- <td style="padding: 5px"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-AccountTime" data-url="@Url.Action("GetAccountTime", "Account", new { characterId = character.Id })">Update</button></td> -->
+                            <td style="padding: 5px"><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#omegaTimeModal" data-character-id="{{ character.id }}" data-character-expiry-date="{{ character.expiry|date:'Y-m-d' }}" data-character-expiry-time="{{ character.expiry|time:'H:i' }}">Update</button></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -33,9 +33,95 @@
         {% endif %}
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="omegaTimeModal" tabindex="-1" aria-labelledby="omegaTimeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="omegaTimeModalLabel">Omega time</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modalForm">
+                    {% csrf_token %}
+                    <div>
+                        <input type="hidden" id="characterId" name="characterId">
+                        <div class="mb-3">
+                            <label for="datePicker" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="datePicker">
+                        </div>
+                        <div class="mb-3">
+                            <label for="timePicker" class="form-label">Time</label>
+                            <input type="time" class="form-control" id="timePicker">
+                        </div>
+                        <div class="mb-3">
+                            <label for="unitSelect" class="form-label">Units</label>
+                            <select class="form-select" id="unitSelect">
+                                {% for rangeUnit in 25|get_range %}
+                                <option value="{{ rangeUnit }}">{{ rangeUnit }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveButton">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_javascript %}
+<script>
+    var omegaTimeModal = document.getElementById('omegaTimeModal')
+    omegaTimeModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        // Extract info from data-character-id attribute
+        var characterId = button.getAttribute('data-character-id')
+        var characterExpiryDate = button.getAttribute('data-character-expiry-date')
+        var characterExpiryTime = button.getAttribute('data-character-expiry-time')
+        // Update the modal's content.
+        var inputId = omegaTimeModal.querySelector('#characterId')
+        var inputDate = omegaTimeModal.querySelector('#datePicker')
+        var inputTime = omegaTimeModal.querySelector('#timePicker')
+        inputId.value = characterId
+        inputDate.value = characterExpiryDate
+        inputTime.value = characterExpiryTime
+    })
+
+    document.getElementById('saveButton').addEventListener('click', function() {
+        var form = document.getElementById('modalForm');
+        var data = new FormData(form);
+
+        var datePickerValue = document.getElementById('datePicker').value;
+        var timePickerValue = document.getElementById('timePicker').value;
+        var unitSelectValue = document.getElementById('unitSelect').value;
+
+        data.append('date', datePickerValue);
+        data.append('time', timePickerValue);
+        data.append('units', unitSelectValue);
+
+        fetch('/wizard-skillfarm/omegatime/', {
+            method: 'POST',
+            body: data
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            var omegaTimeModal = bootstrap.Modal.getInstance(document.getElementById('omegaTimeModal'));
+            omegaTimeModal.hide();
+            // Reload the page
+            location.reload();
+        }).catch(e => {
+            console.error('There was a problem with the fetch operation: ' + e.message);
+        });
+    });
+</script>
 {% endblock %}
 
 {% block extra_css %}

@@ -16,7 +16,7 @@ license = {file = "LICENSE"}
 authors = [
     { name = "Dusty Meg", email = "aa_plugins@mmoore.uk" },
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Environment :: Web Environment",
     "Framework :: Django",
@@ -26,8 +26,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -40,6 +38,7 @@ dynamic = [
 dependencies = [
     "allianceauth<5.0.0,>=4",
     "allianceauth-corptools>=2.7",
+    "django-eveuniverse>=1.5.4",
 ]
 [project.urls]
 Changelog = "https://github.com/Dusty-Meg/aa-wizard-skillfarm/blob/master/CHANGELOG.md"

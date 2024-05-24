@@ -44,8 +44,6 @@ jobs:
       matrix:
         # Don't forget to change the Python version for [upload-coverage] as well
         python-version:
-          - '3.8'
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
@@ -126,7 +124,7 @@ jobs:
         uses: actions/checkout@v4
 
       # Minimum supported Python version by AllianceAuth
-      - name: Set up Python 3.8
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version-file: 'pyproject.toml' # Read the Python version from the pyproject.toml file
