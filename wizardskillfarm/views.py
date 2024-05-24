@@ -63,7 +63,12 @@ def index(request: WSGIRequest) -> HttpResponse:
     for character in farming_characters:
         last_skill = SkillQueue.objects.filter(
             character__character=character.character
-        ).latest("queue_position")
+        )
+
+        if not last_skill:
+            continue
+        
+        last_skill = last_skill.latest("queue_position")
 
         days_between_now_and_start = (
             datetime.now(timezone.utc) - last_skill.start_date
