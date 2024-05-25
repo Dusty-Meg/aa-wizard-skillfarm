@@ -78,6 +78,7 @@ class account_time_character:
     id: str
     type: str
     expiry: datetime.datetime
+    remaining: str
 
 
 @dataclass

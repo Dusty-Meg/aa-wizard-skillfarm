@@ -16,6 +16,7 @@
                     <tr>
                         <th>Character Name</th>
                         <th>End of Account Time</th>
+                        <th>Remaining Time</th>
                         <th>Account Type</th>
                     </tr>
                 </thead>
@@ -24,6 +25,7 @@
                         <tr style="line-height: 10px" class=@character.Warning>
                             <td>{{ character.name }}</td>
                             <td>{{ character.expiry|date:'d-m-Y' }} {{ character.expiry|time:'H:i' }}</td>
+                            <td>{{ character.remaining }}</td>
                             <td>{{ character.type }}</td>
                             <td style="padding: 5px"><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#omegaTimeModal" data-character-id="{{ character.id }}" data-character-expiry-date="{{ character.expiry|date:'Y-m-d' }}" data-character-expiry-time="{{ character.expiry|time:'H:i' }}">Update</button></td>
                         </tr>

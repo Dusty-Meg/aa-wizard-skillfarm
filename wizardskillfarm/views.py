@@ -131,9 +131,24 @@ def characters(request: WSGIRequest) -> HttpResponse:
 
         view_model.characters.append(view_char)
 
+    view_model.characters = sorted(
+        view_model.characters, key=lambda x: x.name, reverse=True
+    )
+
     context = {"model": view_model}
 
     return render(request, "wizardskillfarm/characters.html", context)
+
+
+def calculate_remaining(expiry):
+    # Calculate remaining time
+    remaining_time = expiry - datetime.now(timezone.utc)
+    days, remainder = divmod(remaining_time.total_seconds(), 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    # Format remaining time into a string
+    return f"{int(days)} days, {int(hours)} hours, {int(minutes)} minutes"
 
 
 @login_required
@@ -171,8 +186,13 @@ def omega_time(request: WSGIRequest) -> HttpResponse:
         view_char.id = char.character.character_id
         view_char.type = char.type
         view_char.expiry = char.expiry
+        view_char.remaining = calculate_remaining(char.expiry)
 
         view_model.characters.append(view_char)
+
+    view_model.characters = sorted(
+        view_model.characters, key=lambda x: x.expiry, reverse=True
+    )
 
     context = {"model": view_model}
 
