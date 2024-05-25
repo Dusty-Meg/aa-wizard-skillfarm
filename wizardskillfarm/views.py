@@ -140,6 +140,17 @@ def characters(request: WSGIRequest) -> HttpResponse:
     return render(request, "wizardskillfarm/characters.html", context)
 
 
+def calculate_remaining(expiry):
+    # Calculate remaining time
+    remaining_time = expiry - datetime.now(timezone.utc)
+    days, remainder = divmod(remaining_time.total_seconds(), 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    # Format remaining time into a string
+    return f"{int(days)} days, {int(hours)} hours, {int(minutes)} minutes"
+
+
 @login_required
 @permission_required("wizardskillfarm.basic_access")
 def omega_time(request: WSGIRequest) -> HttpResponse:
@@ -175,6 +186,7 @@ def omega_time(request: WSGIRequest) -> HttpResponse:
         view_char.id = char.character.character_id
         view_char.type = char.type
         view_char.expiry = char.expiry
+        view_char.remaining = calculate_remaining(char.expiry)
 
         view_model.characters.append(view_char)
 
