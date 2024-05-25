@@ -11,7 +11,7 @@
     </div>
     <div class="card-body">
         {% if model.characters %}
-            <table class="table table-striped">
+            <table id="sortableTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Character Name</th>
@@ -76,6 +76,7 @@
 {% endblock %}
 
 {% block extra_javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
 <script>
     var omegaTimeModal = document.getElementById('omegaTimeModal')
     omegaTimeModal.addEventListener('show.bs.modal', function (event) {
@@ -121,6 +122,12 @@
             console.error('There was a problem with the fetch operation: ' + e.message);
         });
     });
+
+    $(document).ready(function()
+        {
+            $("#sortableTable").tablesorter();
+        }
+    );
 </script>
 {% endblock %}
 

@@ -7,11 +7,11 @@
 
 <div class="card card-primary">
     <div class="card-header">
-        <div class="card-title">{% translate "Omega Time" %}</div>
+        <div class="card-title">{% translate "Characters" %}</div>
     </div>
     <div class="card-body">
         {% if model.characters %}
-        <table class="table table-striped">
+        <table id="sortableTable" class="table table-striped">
             <thead>
                 <tr>
                     <th>Character Name</th>
@@ -48,6 +48,12 @@
 {% endblock %}
 
 {% block extra_javascript %}
+<script>
+    $(document).ready(function()
+        {
+            $("#sortableTable").tablesorter();
+        }
+    );
 {% endblock %}
 
 {% block extra_css %}
