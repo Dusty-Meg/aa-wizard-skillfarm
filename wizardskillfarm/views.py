@@ -131,6 +131,10 @@ def characters(request: WSGIRequest) -> HttpResponse:
 
         view_model.characters.append(view_char)
 
+    view_model.characters = sorted(
+        view_model.characters, key=lambda x: x.name, reverse=True
+    )
+
     context = {"model": view_model}
 
     return render(request, "wizardskillfarm/characters.html", context)
@@ -173,6 +177,10 @@ def omega_time(request: WSGIRequest) -> HttpResponse:
         view_char.expiry = char.expiry
 
         view_model.characters.append(view_char)
+
+    view_model.characters = sorted(
+        view_model.characters, key=lambda x: x.expiry, reverse=True
+    )
 
     context = {"model": view_model}
 
