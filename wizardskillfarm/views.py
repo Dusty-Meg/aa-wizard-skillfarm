@@ -270,10 +270,8 @@ def settings_skills(request: WSGIRequest) -> HttpResponse:
                 if included_skill.name == post_skills:
                     skills, created = FarmingSkills.objects.get_or_create(
                         skill_id=included_skill.id,
-                        defaults={
-                            "user": request.user,
-                            "skill_type_id": included_skill.id,
-                        },
+                        user=request.user,
+                        skill_type=included_skill,
                     )
 
                     if created:
