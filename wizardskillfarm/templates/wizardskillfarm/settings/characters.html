@@ -11,6 +11,7 @@
     <br />
     <div class="row">
         <div class="col-md-5">
+            <label for="search"><b>Untracked Characters</b></label>
             <select name="from" id="search" class="form-control" size="8" multiple="multiple">
                 {% if model.not_included_characters %}
                     {% for character in model.not_included_characters %}
@@ -28,6 +29,7 @@
         </div>
 
         <div class="col-md-5">
+            <label for="search"><b>Tracked Characters</b></label>
             <select name="to" id="search_to" class="form-control" size="8" multiple="multiple">
                 {% if model.included_characters %}
                     {% for character in model.included_characters %}
