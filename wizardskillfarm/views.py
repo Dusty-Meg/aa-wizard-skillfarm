@@ -121,6 +121,11 @@ def characters(request: WSGIRequest) -> HttpResponse:
         view_char.last_update = char.last_update
         view_char.total_large_extractors = char.total_large_extractors
 
+        skill_queue = char.character.characteraudit.skillqueue_set.all()
+
+        if skill_queue:
+            view_char.skill_queue_end = skill_queue.latest("queue_position").finish_date
+
         for skill in char.farming_skills.all():
             view_skill = characters_character_skill()
             view_skill.skill_id = skill.skill_type.id

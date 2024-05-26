@@ -3,6 +3,7 @@ Example Test
 """
 
 # Third Party
+from corptools.models import CharacterAudit, SkillQueue
 
 # Django
 from django.contrib.auth.models import User
@@ -73,8 +74,17 @@ class TestViewCharacter(TestCase):
                 corp_name="Test Corp 1",
                 corp_ticker="TST1",
             )
+            character_audit = CharacterAudit.objects.create(character=main_char)
             CharacterOwnership.objects.create(
                 user=user, character=main_char, owner_hash=f"main{uid}"
+            )
+            SkillQueue.objects.create(
+                character=character_audit,
+                skill_id=1,
+                start_date="2021-01-01 00:00:00",
+                finish_date="2021-01-01 00:00:00",
+                finish_level=2,
+                queue_position=1,
             )
             local_farming_character = local_models.FarmingCharacters.objects.create(
                 character=main_char,
