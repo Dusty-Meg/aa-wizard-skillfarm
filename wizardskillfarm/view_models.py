@@ -24,6 +24,7 @@ class characters_character:
     name: str
     last_update: datetime.datetime
     total_large_extractors: float
+    skill_queue_end: datetime.datetime
 
     skills: List[characters_character_skill]
 
