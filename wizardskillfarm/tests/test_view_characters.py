@@ -83,6 +83,7 @@ class TestViewCharacter(TestCase):
                 skill_id=1,
                 start_date="2021-01-01 00:00:00",
                 finish_date="2021-01-01 00:00:00",
+                finish_level=2,
             )
             local_farming_character = local_models.FarmingCharacters.objects.create(
                 character=main_char,
