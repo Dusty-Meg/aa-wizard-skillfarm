@@ -74,12 +74,12 @@ class TestViewCharacter(TestCase):
                 corp_name="Test Corp 1",
                 corp_ticker="TST1",
             )
-            CharacterAudit.objects.create(character=main_char)
+            character_audit = CharacterAudit.objects.create(character=main_char)
             CharacterOwnership.objects.create(
                 user=user, character=main_char, owner_hash=f"main{uid}"
             )
             SkillQueue.objects.create(
-                character=main_char,
+                character=character_audit,
                 skill_id=1,
                 start_date="2021-01-01 00:00:00",
                 finish_date="2021-01-01 00:00:00",
