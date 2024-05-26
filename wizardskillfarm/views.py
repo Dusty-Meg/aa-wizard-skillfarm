@@ -132,7 +132,7 @@ def characters(request: WSGIRequest) -> HttpResponse:
         view_model.characters.append(view_char)
 
     view_model.characters = sorted(
-        view_model.characters, key=lambda x: x.name, reverse=True
+        view_model.characters, key=lambda x: x.name, reverse=False
     )
 
     context = {"model": view_model}
@@ -191,7 +191,7 @@ def omega_time(request: WSGIRequest) -> HttpResponse:
         view_model.characters.append(view_char)
 
     view_model.characters = sorted(
-        view_model.characters, key=lambda x: x.expiry, reverse=True
+        view_model.characters, key=lambda x: x.expiry, reverse=False
     )
 
     context = {"model": view_model}
