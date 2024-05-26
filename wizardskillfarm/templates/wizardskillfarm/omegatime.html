@@ -48,6 +48,11 @@
                 <form id="modalForm">
                     {% csrf_token %}
                     <div>
+                        <div class="alert alert-primary" role="alert">
+                            Leave months at 0 and set the date to existing omega expiry date, to set that date.
+                            <br/>
+                            Leave date and just change months to extend the omega time.
+                        </div>
                         <input type="hidden" id="characterId" name="characterId">
                         <div class="mb-3">
                             <label for="datePicker" class="form-label">Date</label>
@@ -58,7 +63,7 @@
                             <input type="time" class="form-control" id="timePicker">
                         </div>
                         <div class="mb-3">
-                            <label for="unitSelect" class="form-label">Units</label>
+                            <label for="unitSelect" class="form-label">Months</label>
                             <select class="form-select" id="unitSelect">
                                 {% for rangeUnit in 25|get_range %}
                                 <option value="{{ rangeUnit }}">{{ rangeUnit }}</option>

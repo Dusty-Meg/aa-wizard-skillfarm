@@ -11,6 +11,7 @@
     <br />
     <div class="row">
         <div class="col-md-5">
+            <label for="search"><b>Untracked Skills</b></label>
             <select name="from" id="search" class="form-control" size="8" multiple="multiple">
                 {% if model.not_included_skills %}
                     {% for skill in model.not_included_skills %}
@@ -30,6 +31,7 @@
         </div>
 
         <div class="col-md-5">
+            <label for="search"><b>Tracked Skills</b></label>
             <select name="to" id="search_to" class="form-control" size="8" multiple="multiple">
                 {% if model.included_skills %}
                     {% for skill in model.included_skills %}
