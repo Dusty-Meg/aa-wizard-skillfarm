@@ -39,7 +39,7 @@
                     {% if character.skill_queue_end is null %}
                     <td>No Skill Queue</td>
                     {% else %}
-                    <td>{{ character.skill_queue_end|date:'d-m-Y' }} {{ character.skill_queue_end|time:'H:i' }}</td>
+                    <td data-order="{{ character.skill_queue_end|date:'U' }}">{{ character.skill_queue_end|date:'d-m-Y' }} {{ character.skill_queue_end|time:'H:i' }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -56,7 +56,11 @@
 <script>
     $(document).ready(function()
         {
-            $("#sortableTable").tablesorter();
+            $("#sortableTable").tablesorter(
+                {
+                    sortList: [[1,1]]
+                }
+            );
         }
     );
 </script>
