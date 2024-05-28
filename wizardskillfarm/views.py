@@ -210,7 +210,7 @@ def settings_characters(request: WSGIRequest) -> HttpResponse:
     if request.method == "POST":
         included_characters = FarmingCharacters.objects.filter(user=request.user)
         all_characters = CharacterAudit.objects.visible_to(request.user).filter(
-            character__userprofile__user_id=request.user.id
+            character__character_ownership__user_id=request.user.id
         )
 
         post_data = request.POST.getlist("to")
@@ -242,7 +242,7 @@ def settings_characters(request: WSGIRequest) -> HttpResponse:
         return redirect("/wizard-skillfarm/settings/characters")
 
     all_characters = CharacterAudit.objects.visible_to(request.user).filter(
-        character__userprofile__user_id=request.user.id
+        character__character_ownership__user_id=request.user.id
     )
     included_characters = FarmingCharacters.objects.filter(user=request.user)
 
@@ -345,7 +345,7 @@ def settings_skills(request: WSGIRequest) -> HttpResponse:
 def settings_omegatime(request: WSGIRequest) -> HttpResponse:
     if request.method == "POST":
         all_characters = CharacterAudit.objects.visible_to(request.user).filter(
-            character__userprofile__user_id=request.user.id
+            character__character_ownership__user_id=request.user.id
         )
         account_times = AccountTimes.objects.filter(user=request.user)
 
@@ -397,7 +397,7 @@ def settings_omegatime(request: WSGIRequest) -> HttpResponse:
         return redirect("/wizard-skillfarm/settings/omegatime")
 
     all_characters = CharacterAudit.objects.visible_to(request.user).filter(
-        character__userprofile__user_id=request.user.id
+        character__character_ownership__user_id=request.user.id
     )
     account_times = AccountTimes.objects.filter(user=request.user)
 
