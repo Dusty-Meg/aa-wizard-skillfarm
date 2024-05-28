@@ -64,7 +64,7 @@ def update_farming_character(character_id: int, user_id: int):
     farming_skills = user.farmingskills.all()
     farm_character = FarmingCharacters.objects.filter(character=character).first()
 
-    CharacterFarmingSkill.objects.filter(character=character).delete()
+    char_farm_skills = CharacterFarmingSkill.objects.filter(character=character)
 
     total_sp = 0
 
@@ -81,7 +81,12 @@ def update_farming_character(character_id: int, user_id: int):
                 character_skill[0].save()
 
     for skill in farming_skills:
-        farming_skill = CharacterFarmingSkill()
+        farming_skill = [
+            c_f_s for c_f_s in char_farm_skills if c_f_s.skill_id == skill.skill_id
+        ]
+
+        if len(farming_skill) > 0:
+            farming_skill = CharacterFarmingSkill()
 
         farming_skill.character = character
         farming_skill.skill_type = skill.skill_type
@@ -99,6 +104,10 @@ def update_farming_character(character_id: int, user_id: int):
 
         total_sp += farming_skill.sp_in_skill
         farming_skill.save()
+
+    for skill in char_farm_skills:
+        if skill.skill_id not in [f_s.skill_id for f_s in farming_skills]:
+            skill.delete()
 
     farm_character.total_large_extractors = total_sp / 510000
     farm_character.last_update = datetime.datetime.now(datetime.timezone.utc)
