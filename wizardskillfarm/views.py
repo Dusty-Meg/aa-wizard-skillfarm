@@ -5,7 +5,6 @@ from datetime import datetime, timedelta, timezone
 
 # Third Party
 from corptools.models import CharacterAudit, SkillQueue
-from tasks import update_farming_character, update_farming_character_user
 
 # Django
 from django.contrib.auth.decorators import login_required, permission_required
@@ -18,6 +17,7 @@ from django.template.defaulttags import register
 from eveuniverse.models import EveType
 
 from .models import AccountTimes, FarmingCharacters, FarmingSkills
+from .tasks import update_farming_character, update_farming_character_user
 
 # from .models import *
 from .view_models import (
