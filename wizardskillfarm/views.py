@@ -17,6 +17,7 @@ from django.template.defaulttags import register
 from eveuniverse.models import EveType
 
 from .models import AccountTimes, FarmingCharacters, FarmingSkills
+from .tasks import update_farming_character, update_farming_character_user
 
 # from .models import *
 from .view_models import (
@@ -238,6 +239,9 @@ def settings_characters(request: WSGIRequest) -> HttpResponse:
                     )
 
                     if created:
+                        update_farming_character.delay(
+                            included_char.character_id, request.user.id
+                        )
                         character.save()
         return redirect("/wizard-skillfarm/settings/characters")
 
@@ -304,6 +308,7 @@ def settings_skills(request: WSGIRequest) -> HttpResponse:
                     )
 
                     if created:
+                        update_farming_character_user.delay(request.user.id)
                         skills.save()
         return redirect("/wizard-skillfarm/settings/skills")
 
