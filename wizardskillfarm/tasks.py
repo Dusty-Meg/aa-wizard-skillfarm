@@ -56,6 +56,15 @@ def getSpInSkill(activeLevel, skill):
 
 
 @shared_task
+def update_farming_character_user(user_id: int):
+    user = User.objects.filter(id=user_id).first()
+    farming_characters = user.farmingcharacters.all()
+
+    for character in farming_characters:
+        update_farming_character.delay(character.character_id, user.id)
+
+
+@shared_task
 def update_farming_character(character_id: int, user_id: int):
     user = User.objects.filter(id=user_id).first()
     character = EveCharacter.objects.filter(id=character_id).first()

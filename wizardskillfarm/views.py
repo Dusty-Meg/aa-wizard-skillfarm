@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 # Third Party
 from corptools.models import CharacterAudit, SkillQueue
+from tasks import update_farming_character, update_farming_character_user
 
 # Django
 from django.contrib.auth.decorators import login_required, permission_required
@@ -238,6 +239,9 @@ def settings_characters(request: WSGIRequest) -> HttpResponse:
                     )
 
                     if created:
+                        update_farming_character.delay(
+                            included_char.character_id, request.user.id
+                        )
                         character.save()
         return redirect("/wizard-skillfarm/settings/characters")
 
@@ -304,6 +308,7 @@ def settings_skills(request: WSGIRequest) -> HttpResponse:
                     )
 
                     if created:
+                        update_farming_character_user.delay(request.user.id)
                         skills.save()
         return redirect("/wizard-skillfarm/settings/skills")
 
