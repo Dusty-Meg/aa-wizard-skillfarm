@@ -94,7 +94,7 @@ def update_farming_character(character_id: int, user_id: int):
             c_f_s for c_f_s in char_farm_skills if c_f_s.skill_type_id == skill.skill_id
         ]
 
-        if len(farming_skill) > 0:
+        if len(farming_skill) < 1:
             farming_skill = CharacterFarmingSkill()
         else:
             farming_skill = farming_skill[0]
