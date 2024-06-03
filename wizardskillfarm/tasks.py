@@ -67,9 +67,11 @@ def update_farming_character_user(user_id: int):
 @shared_task
 def update_farming_character(character_id: int, user_id: int):
     user = User.objects.filter(id=user_id).first()
-    character = EveCharacter.objects.filter(character_id=character_id).first()
-    character_skills = Skill.objects.filter(character_id=character_id)
-    character_skillqueue = SkillQueue.objects.filter(character_id=character_id)
+    character = EveCharacter.objects.filter(id=character_id).first()
+    character_skills = Skill.objects.filter(character_id=character.character_id)
+    character_skillqueue = SkillQueue.objects.filter(
+        character_id=character.character_id
+    )
     farming_skills = user.farmingskills.all()
     farm_character = FarmingCharacters.objects.filter(character=character).first()
 
