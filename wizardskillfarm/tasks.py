@@ -67,7 +67,7 @@ def update_farming_character_user(user_id: int):
 @shared_task
 def update_farming_character(character_id: int, user_id: int):
     user = User.objects.filter(id=user_id).first()
-    character = EveCharacter.objects.filter(id=character_id).first()
+    character = EveCharacter.objects.filter(character_id=character_id).first()
     character_skills = Skill.objects.filter(character_id=character_id)
     character_skillqueue = SkillQueue.objects.filter(character_id=character_id)
     farming_skills = user.farmingskills.all()
@@ -91,7 +91,7 @@ def update_farming_character(character_id: int, user_id: int):
 
     for skill in farming_skills:
         farming_skill = [
-            c_f_s for c_f_s in char_farm_skills if c_f_s.skill_id == skill.skill_id
+            c_f_s for c_f_s in char_farm_skills if c_f_s.skill_type_id == skill.skill_id
         ]
 
         if len(farming_skill) > 0:
@@ -115,7 +115,7 @@ def update_farming_character(character_id: int, user_id: int):
         farming_skill.save()
 
     for skill in char_farm_skills:
-        if skill.skill_id not in [f_s.skill_id for f_s in farming_skills]:
+        if skill.skill_type_id not in [f_s.skill_id for f_s in farming_skills]:
             skill.delete()
 
     farm_character.total_large_extractors = total_sp / 510000
