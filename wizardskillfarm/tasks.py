@@ -6,7 +6,7 @@ import logging
 
 # Third Party
 from celery import shared_task
-from corptools.models import Skill, SkillQueue
+from corptools.models import CharacterAudit, Skill, SkillQueue
 
 # Django
 from django.contrib.auth.models import User
@@ -68,8 +68,11 @@ def update_farming_character_user(user_id: int):
 def update_farming_character(character_id: int, user_id: int):
     user = User.objects.filter(id=user_id).first()
     character = EveCharacter.objects.filter(id=character_id).first()
-    character_skills = Skill.objects.filter(character_id=character_id)
-    character_skillqueue = SkillQueue.objects.filter(character_id=character_id)
+    character_audit = CharacterAudit.objects.filter(character=character).first()
+    character_skills = Skill.objects.filter(character=character_audit)
+    character_skillqueue = SkillQueue.objects.filter(
+        character=character_audit
+    ).order_by("queue_position")
     farming_skills = user.farmingskills.all()
     farm_character = FarmingCharacters.objects.filter(character=character).first()
 
@@ -86,7 +89,7 @@ def update_farming_character(character_id: int, user_id: int):
             ]
 
             if len(character_skill) > 0:
-                character_skill[0].active_skill_level = skill.finish_level
+                character_skill[0].trained_skill_level = skill.finish_level
                 character_skill[0].save()
 
     for skill in farming_skills:
@@ -108,9 +111,9 @@ def update_farming_character(character_id: int, user_id: int):
         char_skill = [c_k for c_k in character_skills if c_k.skill_id == skill.skill_id]
 
         if len(char_skill) > 0:
-            farming_skill.skill_level = char_skill[0].active_skill_level
+            farming_skill.skill_level = char_skill[0].trained_skill_level
             farming_skill.sp_in_skill = getSpInSkill(
-                char_skill[0].active_skill_level, skill.skill_type
+                char_skill[0].trained_skill_level, skill.skill_type
             )
 
         total_sp += farming_skill.sp_in_skill
