@@ -85,8 +85,8 @@ def update_farming_character(character_id: int, user_id: int):
                 c_k for c_k in character_skills if c_k.skill_id == skill.skill_id
             ]
 
-            if not character_skill:
-                character_skill[0].active_skill_level = skill.level_end
+            if len(character_skill) > 0:
+                character_skill[0].active_skill_level = skill.finish_level
                 character_skill[0].save()
 
     for skill in farming_skills:
