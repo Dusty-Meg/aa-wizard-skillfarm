@@ -79,6 +79,13 @@ class CharacterFarmingSkill(models.Model):
     )
 
 
+class DustyBotSkillQueueCheck(models.Model):
+    character = models.OneToOneField(
+        EveCharacter, on_delete=models.CASCADE, null=False, default=None
+    )
+    last_alerted = models.DateTimeField(null=False, default=None, blank=False)
+
+
 class General(models.Model):
     """Meta model for app permissions"""
 
