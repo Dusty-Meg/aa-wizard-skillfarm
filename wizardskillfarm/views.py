@@ -98,6 +98,10 @@ def index(request: WSGIRequest) -> HttpResponse:
             skill_queue.skill_queue_end = last_skill.finish_date
             view_model.paused_skill_queue.append(skill_queue)
 
+    view_model.low_skill_queue = sorted(
+        view_model.low_skill_queue, key=lambda x: x.skill_queue_end
+    )
+
     context = {"model": view_model}
 
     return render(request, "wizardskillfarm/index.html", context)
