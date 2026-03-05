@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("eveuniverse", "0010_alter_eveindustryactivityduration_eve_type_and_more"),
         ("wizardskillfarm", "0003_alter_farmingskills_user"),
     ]
 

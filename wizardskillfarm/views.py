@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 # Third Party
 from corptools.models import CharacterAudit, SkillQueue
+from eve_sde.models import ItemType
 
 # Django
 from django.contrib.auth.decorators import login_required, permission_required
@@ -12,9 +13,6 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template.defaulttags import register
-
-# Alliance Auth (External Libs)
-from eveuniverse.models import EveType
 
 from .models import AccountTimes, FarmingCharacters, FarmingSkills
 from .tasks import update_farming_character, update_farming_character_user
@@ -286,9 +284,9 @@ def settings_skills(request: WSGIRequest) -> HttpResponse:
 
     if request.method == "POST":
         all_skills = (
-            EveType.objects.filter(icon_id=33)
+            ItemType.objects.filter(icon_id=33)
             .filter(published=True)
-            .filter(eve_market_group__isnull=False)
+            .filter(market_group__isnull=False)
         )
         included_skills = FarmingSkills.objects.filter(user=request.user)
 
@@ -317,9 +315,9 @@ def settings_skills(request: WSGIRequest) -> HttpResponse:
         return redirect("/wizard-skillfarm/settings/skills")
 
     all_skills = (
-        EveType.objects.filter(icon_id=33)
+        ItemType.objects.filter(icon_id=33)
         .filter(published=True)
-        .filter(eve_market_group__isnull=False)
+        .filter(market_group__isnull=False)
     )
     included_skills = FarmingSkills.objects.filter(user=request.user)
 

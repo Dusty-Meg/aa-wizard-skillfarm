@@ -4,6 +4,7 @@ Create your models in here
 """
 
 # Third Party
+from eve_sde.models import ItemType
 
 # Django
 from django.contrib.auth.models import User
@@ -11,9 +12,6 @@ from django.db import models
 
 # Alliance Auth
 from allianceauth.eveonline.models import EveCharacter
-
-# Alliance Auth (External Libs)
-from eveuniverse.models import EveType
 
 
 class AccountTimes(models.Model):
@@ -33,7 +31,7 @@ class FarmingSkills(models.Model):
     )
     skill_id = models.IntegerField()
     skill_type = models.ForeignKey(
-        EveType, on_delete=models.CASCADE, related_name="farmingskills", unique=False
+        ItemType, on_delete=models.CASCADE, related_name="farmingskills", unique=False
     )
 
 
@@ -66,7 +64,7 @@ class CharacterFarmingSkill(models.Model):
         EveCharacter, on_delete=models.CASCADE, null=False, default=None
     )
     skill_type = models.ForeignKey(
-        EveType, on_delete=models.DO_NOTHING, unique=False, null=True, default=None
+        ItemType, on_delete=models.DO_NOTHING, unique=False, null=True, default=None
     )
     skill_level = models.IntegerField()
     sp_in_skill = models.IntegerField()

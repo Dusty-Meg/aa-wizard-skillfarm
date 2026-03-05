@@ -11,5 +11,4 @@ Skill farm plugin for [Alliance Auth](https://gitlab.com/allianceauth/allianceau
 ______________________________________________________________________
 
 Basic skill farming helper designed to piggyback off allianceauth-corptools.
-Requires django-eveuniverse to also be installed.
-Run `python manage.py eveuniverse_load_data types --types-enabled-sections market_groups` after installation to populate the skills list.
+Requires django-eveonline-sde to also be installed.

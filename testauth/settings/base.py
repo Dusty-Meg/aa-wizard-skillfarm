@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "allianceauth.theme.darkly",
     "allianceauth.theme.flatly",
     "allianceauth.theme.materia",
-    "eveuniverse",
+    "eve_sde",
     "corptools",
 ]
 

@@ -14,9 +14,6 @@ from django.contrib.auth.models import User
 # Alliance Auth
 from allianceauth.eveonline.models import EveCharacter
 
-# Alliance Auth (External Libs)
-from eveuniverse.models import EveType
-
 from .models import CharacterFarmingSkill, FarmingCharacters
 
 logger = logging.getLogger(__name__)
@@ -33,24 +30,24 @@ def update_farming_characters():
 
 
 def getSpInSkill(activeLevel, skill):
-    modifier, _ = EveType.objects.get_or_create_esi(
-        id=skill.id, include_children=True, enabled_sections=[EveType.Section.DOGMAS]
-    )
-    modifier.save()
+    type_dogma = skill.dogma.filter(dogma_attribute_id=275).first()
 
-    type = modifier.dogma_attributes.get(eve_dogma_attribute_id=275)
+    if not type_dogma or type_dogma.value is None:
+        return 0
+
+    skill_rank = type_dogma.value
 
     match activeLevel:
         case 1:
-            return 256 * type.value
+            return 256 * skill_rank
         case 2:
-            return 1414 * type.value
+            return 1414 * skill_rank
         case 3:
-            return 8000 * type.value
+            return 8000 * skill_rank
         case 4:
-            return 45255 * type.value
+            return 45255 * skill_rank
         case 5:
-            return 256000 * type.value
+            return 256000 * skill_rank
         case _:
             return 0
 

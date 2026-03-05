@@ -38,7 +38,7 @@ dynamic = [
 dependencies = [
     "allianceauth<5.0.0,>=4",
     "allianceauth-corptools>=2.7",
-    "django-eveuniverse>=1.5.4",
+    "django-eveonline-sde>=0.0.1b5",
 ]
 [project.urls]
 Changelog = "https://github.com/Dusty-Meg/aa-wizard-skillfarm/blob/master/CHANGELOG.md"
