@@ -49,8 +49,9 @@
 </form>
 {% endblock %}
 
+{% load static %}
 {% block extra_javascript %}
-<script src="https://raw.githubusercontent.com/crlcu/multiselect/refs/heads/master/dist/js/multiselect.min.js"></script>
+<script src="{% static 'wizardskillfarm/js/multiselect.min.js' %}"></script>
 
 <script type="text/javascript">
     jQuery(document).ready(function($) {
